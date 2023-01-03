@@ -1,6 +1,16 @@
-import './css/styles.css';
 import PixabayApiService from './js-components/Pixabay-API';
 import Notiflix from 'notiflix';
+import createMarkup from './js-components/create-card-markup';
+
+import './css/styles.css';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
+const lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+  alertError: false,
+});
 
 const pixabayApiService = new PixabayApiService();
 
@@ -31,15 +41,31 @@ function fetchCard() {
   pixabayApiService
     .fetchPictures()
     .then(pictures => {
-      console.log(pictures);
+      console.dir(pictures.hits);
       if (!pictures.hits.length) {
         Notiflix.Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
         );
+        pixabayApiService.page = 1;
+
         return;
       }
 
-      createMarkup(pictures.hits);
+      if (pixabayApiService.currentTotalPage >= pictures.totalHits) {
+        Notiflix.Notify.warning(
+          "We're sorry, but you've reached the end of search results."
+        );
+
+        return;
+      }
+
+      if (pixabayApiService.page === 2) {
+        Notiflix.Notify.info(`Hooray! We found ${pictures.totalHits} images.`);
+      }
+
+      const markup = createMarkup(pictures.hits);
+      refs.gallery.insertAdjacentHTML('beforeend', markup);
+      lightbox.refresh();
       refs.loadMore.removeAttribute('hidden');
     })
     .catch(err => {
@@ -52,37 +78,4 @@ function fetchCard() {
 
 function clearCard() {
   refs.gallery.innerHTML = '';
-}
-
-function createMarkup(arr) {
-  const markup = arr.reduce(
-    (
-      acc,
-      { webformatURL, largeImageURL, tags, likes, views, comments, downloads }
-    ) => {
-      return (
-        acc +
-        `<div class="photo-card">
-           <img src="${webformatURL}" alt="${tags}" loading="lazy" />
-        <div class="info">
-            <p class="info-item">
-            <b>Likes: ${likes}</b>
-            </p>
-            <p class="info-item">
-            <b>Views: ${views}</b>
-            </p>
-            <p class="info-item">
-            <b>Comments: ${comments}</b>
-            </p>
-            <p class="info-item">
-            <b>Downloads: ${downloads}</b>
-            </p>
-        </div>
-     </div>`
-      );
-    },
-    ''
-  );
-
-  refs.gallery.insertAdjacentHTML('beforeend', markup);
 }
