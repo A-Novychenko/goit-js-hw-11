@@ -67,6 +67,7 @@ function fetchCard() {
       refs.gallery.insertAdjacentHTML('beforeend', markup);
       lightbox.refresh();
       refs.loadMore.removeAttribute('hidden');
+      scroll();
     })
     .catch(err => {
       console.log(err.message);
@@ -78,4 +79,16 @@ function fetchCard() {
 
 function clearCard() {
   refs.gallery.innerHTML = '';
+}
+
+function scroll() {
+  const { height: cardHeight } = document
+    .querySelector('.js-gallery')
+
+    .firstElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight * 10,
+    behavior: 'smooth',
+  });
 }
