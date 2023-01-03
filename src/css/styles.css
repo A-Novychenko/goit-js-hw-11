@@ -15,6 +15,7 @@ body {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  margin-top: 110px;
 
 }
 
@@ -47,8 +48,9 @@ ul {
   top: 0;
   left: 0;
 
-  background-color: blue;
+  background-color: #00f;
   width: 100%;
+  height: 110px;
 }
 
 .form-box {
@@ -68,12 +70,12 @@ form {
 
 input[type="text"] {
   outline: none;
-  border: none;
+  border: 1px solid transparent;
   padding: 5px 100px 5px 30px;
   display: block;
   width: 100%;
   height: 50px;
-  background: #fff;
+  background-color: #fff;
   border-radius: 25px;
 }
 
@@ -85,7 +87,7 @@ button[type="submit"] {
   outline: none;
   border: none;
   display: inline-block;
-  background: #00f;
+  background-color: #00f;
   color: #fff;
   padding: 10px 25px;
   border-radius: 25px;
@@ -93,5 +95,53 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-  background: #f00;
+  background-color: #ffff00;
+  border: 1px solid #00f;
+
+  font-weight: 700;
+  color: #00f;
+}
+
+
+
+
+
+.gallery {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.photo-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  flex-basis: calc((100% - 10px) / 4);
+
+
+  height: 700px;
+}
+
+.photo-wrap {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  height: 500px;
+
+}
+
+.photo-wrap img {
+  overflow: hidden;
+}
+
+.info {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 200px;
+  background-color: rgb(212, 212, 212);
 }
