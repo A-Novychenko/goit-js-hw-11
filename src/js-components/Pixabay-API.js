@@ -7,11 +7,12 @@ export default class PixabayApiService {
   constructor() {
     this.page = 1;
     this.searchQuery = '';
-    this.perPage = 40;
-    this.currentTotalPage = this.page * this.perPage;
+    this.perPage = 200;
+    this.currentTotalPage = 0;
   }
 
   async fetchPictures() {
+    this.currentTotalPage = this.page * this.perPage;
     const response = await axios.get(BASE_URL, {
       params: {
         key: API_KEY,
@@ -38,5 +39,8 @@ export default class PixabayApiService {
 
   resetPage() {
     this.page = 1;
+  }
+  resetCurrentTotalPage() {
+    this.currentTotalPage = 0;
   }
 }
