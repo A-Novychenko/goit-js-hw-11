@@ -28,6 +28,8 @@ const refs = {
   guard: document.querySelector('.guard'),
 };
 
+let currentPage = 1;
+
 refs.form.addEventListener('submit', onSearch);
 // refs.loadMore.addEventListener('click', onLoadMore);
 
@@ -36,7 +38,7 @@ function onSearch(e) {
 
   clearCard();
   pixabayApiService.resetPage();
-  pixabayApiService.resetCurrentTotalPage();
+  // pixabayApiService.resetCurrentTotalPage();
   pixabayApiService.query = e.currentTarget.searchQuery.value;
   fetchCard();
 }
@@ -48,21 +50,28 @@ function onSearch(e) {
 // }
 
 function fetchCard() {
+  let totalPage = 0;
+
   pixabayApiService
     .fetchPictures()
     .then(pictures => {
       console.log(pictures);
+
+      totalPage = Math.ceil(pictures.totalHits / pixabayApiService.perPage);
+
       if (!pictures.hits.length) {
         Notiflix.Notify.failure(
-          'Sorry, there are no images matching your search query. Please try again.'
+          '(Таких изображений не найдено!)Sorry, there are no images matching your search query. Please try again.'
         );
-        pixabayApiService.page = 1;
+        pixabayApiService.resetPage();
 
         return;
       }
 
       if (pixabayApiService.page === 2) {
-        Notiflix.Notify.info(`Hooray! We found ${pictures.totalHits} images.`);
+        Notiflix.Notify.info(
+          `(Ура! Мы нашли изображения: ) Hooray! We found ${pictures.totalHits} images.`
+        );
       }
 
       observer.observe(refs.guard);
@@ -71,19 +80,22 @@ function fetchCard() {
       lightbox.refresh();
       refs.loadMore.removeAttribute('hidden');
       // scroll();
-      console.log(pixabayApiService.currentTotalPage);
-      if (pixabayApiService.currentTotalPage >= pictures.totalHits) {
-        Notiflix.Notify.warning(
-          "We're sorry, but you've reached the end of search results."
-        );
+      console.log('следущая страница:', pixabayApiService.page);
+      console.log('текущая страница:', currentPage);
+      console.log('К-во страниц', totalPage);
+
+      if (currentPage >= totalPage) {
         observer.unobserve(refs.guard);
-        // return;
+
+        Notiflix.Notify.warning(
+          "(Сожалеем, но вы достигли конца результатов поиска) We're sorry, but you've reached the end of search results."
+        );
       }
     })
     .catch(err => {
       console.log(err.message);
       Notiflix.Notify.failure(
-        'Sorry, there are no images matching your search query. Please try again.'
+        '(2Таких изображений не найдено!)Sorry, there are no images matching your search query. Please try again.'
       );
     });
 }
@@ -107,6 +119,7 @@ function onInfinityLoad(entries, observer) {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       fetchCard();
+      currentPage += 1;
       // if (pixabayApiService.currentTotalPage === 500) {
       //   observer.unobserve(refs.guard);
       //   return;
