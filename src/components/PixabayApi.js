@@ -7,8 +7,7 @@ export default class PixabayApiService {
   constructor() {
     this.page = 1;
     this.searchQuery = '';
-    this.perPage = 200;
-    // this.perPage = 40;
+    this.perPage = 40;
   }
 
   async fetchPictures() {

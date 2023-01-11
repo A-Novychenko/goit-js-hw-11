@@ -1,6 +1,6 @@
-import PixabayApiService from './js-components/Pixabay-API';
+import PixabayApiService from './components/PixabayApi';
 import Notiflix from 'notiflix';
-import createMarkup from './js-components/create-card-markup';
+import createMarkup from './components/createCardMarkup';
 
 import './css/styles.css';
 import SimpleLightbox from 'simplelightbox';
@@ -23,9 +23,11 @@ const observer = new IntersectionObserver(onInfinityLoad, options);
 
 const refs = {
   form: document.querySelector('#search-form'),
+  searchBtn: document.querySelector('.search-form button'),
   gallery: document.querySelector('.js-gallery'),
   loadMore: document.querySelector('.js-load-more'),
   guard: document.querySelector('.guard'),
+  textEnd: document.querySelector('.js-end-list'),
 };
 
 let totalImg = 0;
@@ -35,9 +37,23 @@ refs.form.addEventListener('submit', onSearch);
 
 function onSearch(e) {
   e.preventDefault();
+  totalImg = 0;
 
+  refs.searchBtn.setAttribute('disabled', 'enabled');
+  refs.searchBtn.textContent = 'loading...';
+  setTimeout(() => {
+    refs.searchBtn.removeAttribute('disabled');
+    refs.searchBtn.textContent = 'Search';
+  }, 1000);
+
+  if (!refs.textEnd.classList.contains('is-hidden')) {
+    refs.textEnd.classList.add('is-hidden');
+  }
+
+  observer.unobserve(refs.guard);
   clearCard();
   pixabayApiService.resetPage();
+
   pixabayApiService.query = e.currentTarget.searchQuery.value;
   fetchCard();
 }
@@ -54,7 +70,7 @@ function fetchCard() {
     .then(pictures => {
       if (!pictures.hits.length) {
         Notiflix.Notify.failure(
-          '(Таких изображений не найдено!)Sorry, there are no images matching your search query. Please try again.'
+          'Sorry, there are no images matching your search query. Please try again.'
         );
         pixabayApiService.resetPage();
 
@@ -62,9 +78,7 @@ function fetchCard() {
       }
 
       if (pixabayApiService.page === 2) {
-        Notiflix.Notify.info(
-          `(Ура! Мы нашли изображения: ) Hooray! We found ${pictures.totalHits} images.`
-        );
+        Notiflix.Notify.info(`Hooray! We found ${pictures.totalHits} images.`);
       }
 
       observer.observe(refs.guard);
@@ -73,20 +87,28 @@ function fetchCard() {
       refs.gallery.insertAdjacentHTML('beforeend', markup);
       lightbox.refresh();
       // refs.loadMore.removeAttribute('hidden');
+
       // scroll();
+
+      console.log('totalIMG', totalImg);
+      console.log('totalHits', pictures.totalHits);
 
       if (totalImg >= pictures.totalHits) {
         observer.unobserve(refs.guard);
 
         Notiflix.Notify.warning(
-          "(Сожалеем, но вы достигли конца результатов поиска) We're sorry, but you've reached the end of search results."
+          "We're sorry, but you've reached the end of search results."
         );
+
+        if (refs.textEnd.classList.contains('is-hidden')) {
+          refs.textEnd.classList.remove('is-hidden');
+        }
       }
     })
     .catch(err => {
       console.log(err.message);
       Notiflix.Notify.failure(
-        '(2Таких изображений не найдено!)Sorry, there are no images matching your search query. Please try again.'
+        'Sorry, there are no images matching your search query. Please try again.'
       );
     });
 }

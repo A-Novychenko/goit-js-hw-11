@@ -102,16 +102,24 @@ button[type="submit"]:hover {
   color: #00f;
 }
 
+button[type="submit"]:disabled {
+  background-color: transparent;
+  color: red;
+}
+
 .gallery {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  padding: 30px 0;
 
   flex-wrap: wrap;
   gap: 30px;
 }
 
 .card-link {
+
   text-decoration: none;
   color: #212121;
 }
@@ -123,10 +131,14 @@ button[type="submit"]:hover {
   justify-content: space-between;
   flex-basis: calc((100% - 10px) / 4);
 
-  background-color: rgb(212, 212, 212);
+  background-color: rgba(212, 212, 212, 0.7);
+  border-radius: 5px;
+  box-shadow: 10px 10px 20px 0px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 10px 10px 20px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 10px 10px 20px 0px rgba(0, 0, 0, 0.75);
 
 
-  height: 400px;
+  height: 420px;
   width: 500px;
   overflow: hidden;
 }
@@ -137,6 +149,21 @@ button[type="submit"]:hover {
 
 .info {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  text-align: center;
   gap: 15px;
+  padding: 0 15px;
+}
+
+.text-info {
+  display: block;
+  text-align: center;
+  color: #630000;
+  font-size: 40px;
+  font-weight: 700;
+
+}
+
+.is-hidden {
+  color: transparent;
 }
