@@ -8,6 +8,7 @@ export default class PixabayApiService {
     this.page = 1;
     this.searchQuery = '';
     this.perPage = 200;
+    // this.perPage = 40;
   }
 
   async fetchPictures() {

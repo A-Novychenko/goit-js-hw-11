@@ -102,10 +102,6 @@ button[type="submit"]:hover {
   color: #00f;
 }
 
-
-
-
-
 .gallery {
   display: flex;
   justify-content: center;
@@ -115,6 +111,11 @@ button[type="submit"]:hover {
   gap: 30px;
 }
 
+.card-link {
+  text-decoration: none;
+  color: #212121;
+}
+
 .photo-card {
   display: flex;
   flex-direction: column;
@@ -122,26 +123,20 @@ button[type="submit"]:hover {
   justify-content: space-between;
   flex-basis: calc((100% - 10px) / 4);
 
+  background-color: rgb(212, 212, 212);
 
-  height: 700px;
-}
 
-.photo-wrap {
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-  height: 500px;
-
-}
-
-.photo-wrap img {
+  height: 400px;
+  width: 500px;
   overflow: hidden;
+}
+
+.photo-card img {
+  height: 350px;
 }
 
 .info {
   display: flex;
-  justify-content: center;
-  width: 100%;
-  height: 200px;
-  background-color: rgb(212, 212, 212);
+  justify-content: space-between;
+  gap: 15px;
 }

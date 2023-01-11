@@ -6,10 +6,10 @@ export default function createMarkup(arr) {
     ) => {
       return (
         acc +
-        `<a href="${largeImageURL}">
+        `<a class="card-link"href="${largeImageURL}">
             <div class="photo-card">
-                <img src="${webformatURL}" alt="${tags}" loading="lazy" />
-            <div class="info">
+              <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+              <div class="info">
                 <p class="info-item">
                 <b>Likes: ${likes}</b>
                 </p>
@@ -22,7 +22,7 @@ export default function createMarkup(arr) {
                 <p class="info-item">
                 <b>Downloads: ${downloads}</b>
                 </p>
-            </div>
+              </div>
         </div>
     </a>`
       );
